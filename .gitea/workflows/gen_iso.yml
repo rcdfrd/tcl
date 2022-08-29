@@ -1,0 +1,25 @@
+name: gen_iso
+on: 
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Pacakges
+        run: |
+          apt-get update
+          apt-get -y install squashfs-tools cpio tar gzip genisoimage xorriso advancecomp p7zip-full
+          apt-get clean
+
+      - name: Run Script
+        run: |
+          bash main.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: tcl.iso
+          path: /tmp/tcl.iso

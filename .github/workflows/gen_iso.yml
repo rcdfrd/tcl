@@ -19,7 +19,7 @@ jobs:
 
       - name: Run Script
         run: |
-          sudo bash main.py
+          sudo bash main.sh
       
       - name: Upload artifact
         uses: actions/upload-artifact@main

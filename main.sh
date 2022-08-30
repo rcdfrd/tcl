@@ -89,7 +89,7 @@ download_files() {
 }
 
 install_package() {
-    pacakge_name="$1"
+    local pacakge_name="$1"
     pushd $temp_dir/down || _error "pushd $temp_dir/down\n"
     wget "http://tinycorelinux.net/${tcz_version}/x86_64/tcz/${pacakge_name}.tcz" -O "$pacakge_name".tcz
     wget "http://tinycorelinux.net/${tcz_version}/x86_64/tcz/${pacakge_name}.tcz.md5.txt" -O "$pacakge_name".tcz.md5.txt

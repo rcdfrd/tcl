@@ -165,7 +165,7 @@ create_iso() {
     cp -a $temp_dir/isolinux $temp_dir/new/boot/isolinux
     xorriso -as mkisofs -l -J -R -V TC-custom -no-emul-boot -boot-load-size 4 \
         -boot-info-table -b /boot/isolinux/isolinux.bin \
-        -c /boot/isolinux/boot.cat -o /tmp/TC-remastered.iso $temp_dir/new
+        -c /boot/isolinux/boot.cat -o /tmp/tcl.iso $temp_dir/new
     # xorriso -as mkisofs \
     #     -o $temp_dir/TC-remastered.iso \
     #     -isohybrid-mbr syslinux-6.03/bios/mbr/isohdpfx.bin \

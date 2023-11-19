@@ -16,10 +16,6 @@ _green() {
     printf '\033[0;31;32m%b\033[0m' "$1"
 }
 
-_yellow() {
-    printf '\033[0;31;33m%b\033[0m' "$1"
-}
-
 _blue() {
     printf '\033[0;31;36m%b\033[0m' "$1"
 }
@@ -35,13 +31,6 @@ _exists() {
     fi
     local rt=$?
     return ${rt}
-}
-
-_exit() {
-    _red "\nThe script has been terminated.\n"
-    # clean up
-    rm -fr $temp_dir
-    exit 1
 }
 
 _error() {
@@ -127,7 +116,12 @@ extract_file() {
     install_package "grub2-multi"
     # util-linux
     install_package "util-linux"
-
+    # tar and xz
+    install_package "tar"
+    install_package "xz"
+    # wget
+    install_package "ca-certificates"
+    install_package "wget"
 
     pushd $temp_dir/ext || _error "pushd $temp_dir/ext\n"
     cp -a usr/local/etc/ssh/sshd_config.orig usr/local/etc/ssh/sshd_config

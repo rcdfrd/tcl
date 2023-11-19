@@ -51,8 +51,8 @@ else
     password="toor"
 fi
 # Ask whether to use DHCP
-read -Rp "Do you want to use DHCP? (y/n): " use_dhcp
-if [ "$use_dhcp" == "y" ]; then
+read -rp "Do you want to use DHCP? (y/n): " use_dhcp
+if [ ! "$use_dhcp" == "y" ]; then
     # If DHCP is needed, ask for related information
     read -rp "Please enter the host IP address: " ip
     read -rp "Please enter the subnet mask: " netmask
@@ -65,6 +65,7 @@ else
 fi
 
 echo "Password set to: $password"
+
 echo "Using DHCP: $use_dhcp"
 if [ "$use_dhcp" == "y" ]; then
     echo "Host IP address: $ip"
@@ -72,9 +73,9 @@ if [ "$use_dhcp" == "y" ]; then
     echo "Gateway address: $gateway"
 fi
 
-read -rp "Comfirm that the informative above is correct? (y/n): " _bool
+read -rp "Comfirm that the information above is correct? (y/n): " _bool
 if [ ! "$_bool" == "y" ]; then
-    exit 1
+    _error "the information above is not correct"
 fi
 
 
@@ -86,3 +87,4 @@ echo "menuentry 'tcl' {
 " > $cfg
 $grubreboot tcl
 
+echo "Please reboot to enter tcl"

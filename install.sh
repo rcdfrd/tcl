@@ -20,6 +20,43 @@ check_tools() {
     done
 }
 
+query(){
+    # Ask whether to change the password
+    read -rp "Do you want to change the password? (y/n default password is toor): " _bool
+    if [ "$_bool" == "y" ]; then
+        read -r -p "Please enter a new password: " password
+    else
+        password="toor"
+    fi
+
+    # Ask whether to use DHCP
+    read -rp "Do you want to use DHCP? (y/n): " use_dhcp
+    if [ ! "$use_dhcp" == "y" ]; then
+        # If DHCP is needed, ask for related information
+        read -rp "Please enter the host IP address: " ip
+        read -rp "Please enter the subnet mask: " netmask
+        read -rp "Please enter the gateway address: " gateway
+    else
+        # If DHCP is not used, set default values or customize as needed
+        ip=
+        netmask=
+        gateway=
+    fi
+
+    echo "Password set to: $password"
+
+    echo "Using DHCP: $use_dhcp"
+    if [ "$use_dhcp" == "y" ]; then
+        echo "Host IP address: $ip"
+        echo "Subnet mask: $netmask"
+        echo "Gateway address: $gateway"
+    fi
+
+    read -rp "Comfirm that the information above is correct? (y/n): " _bool
+    if [ ! "$_bool" == "y" ]; then
+        _error "the information above is not correct"
+    fi
+}
 
 check_tools wget
 corepure64="https://raw.githubusercontent.com/rcdfrd/tcl/main/bin/corepure64.gz"
@@ -43,41 +80,7 @@ mountpoint=$(df /boot | tail -1 | awk '{print $NF}')
 uuid=$(blkid -s UUID -o value "$dev")
 [ -z "$uuid" ] && echo "Unable to find the boot partition!" && exit 1
 
-# Ask whether to change the password
-read -rp "Do you want to change the password? (y/n default password is toor): " _bool
-if [ "$_bool" == "y" ]; then
-    read -r -p "Please enter a new password: " password
-else
-    password="toor"
-fi
-# Ask whether to use DHCP
-read -rp "Do you want to use DHCP? (y/n): " use_dhcp
-if [ ! "$use_dhcp" == "y" ]; then
-    # If DHCP is needed, ask for related information
-    read -rp "Please enter the host IP address: " ip
-    read -rp "Please enter the subnet mask: " netmask
-    read -rp "Please enter the gateway address: " gateway
-else
-    # If DHCP is not used, set default values or customize as needed
-    ip=
-    netmask=
-    gateway=
-fi
-
-echo "Password set to: $password"
-
-echo "Using DHCP: $use_dhcp"
-if [ "$use_dhcp" == "y" ]; then
-    echo "Host IP address: $ip"
-    echo "Subnet mask: $netmask"
-    echo "Gateway address: $gateway"
-fi
-
-read -rp "Comfirm that the information above is correct? (y/n): " _bool
-if [ ! "$_bool" == "y" ]; then
-    _error "the information above is not correct"
-fi
-
+query
 
 echo "menuentry 'tcl' {
   search --no-floppy --fs-uuid --set=root $uuid
